@@ -1,0 +1,2 @@
+rootProject.name = "OQS-provider"
+
