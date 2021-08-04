@@ -1,6 +1,7 @@
 package com.mrburny.dilithium
 
 import com.mrburny.OQSProvider
+import com.mrburny.OQSProvider.DILITHIUM2_AES_OID
 import org.bouncycastle.asn1.ASN1ObjectIdentifier
 import org.bouncycastle.asn1.ASN1OctetString
 import org.bouncycastle.asn1.ASN1Set
@@ -30,7 +31,7 @@ import java.security.PrivateKey
  * }
  *
  * All OPTIONAL attributes will be omitted for the time being.
- * For the sake of reliability and delivery this feature in time we will use ASN.1-parsing functionality from the bouncy castle.
+ * For the sake of reliability and delivery of this feature in time we will use ASN.1-parsing functionality from the bouncy castle library.
  */
 class Dilithium2AESPrivateKey(
     @Transient
@@ -44,7 +45,7 @@ class Dilithium2AESPrivateKey(
     override fun getFormat(): String = "PKCS#8"
 
     override fun getEncoded(): ByteArray {
-        val algorithmIdentifier = AlgorithmIdentifier(ASN1ObjectIdentifier("1.3.6.1.4.1.2.267.11.4.4"))
+        val algorithmIdentifier = AlgorithmIdentifier(ASN1ObjectIdentifier(DILITHIUM2_AES_OID))
         return PrivateKeyInfo(algorithmIdentifier, DEROctetString(privateKey)).encoded
     }
 }

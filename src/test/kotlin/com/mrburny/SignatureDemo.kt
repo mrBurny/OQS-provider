@@ -17,8 +17,6 @@ class SignatureDemo {
         val signature = Signature("Dilithium2-AES", privateKeyBytes)
         val privateKey = signature.generate_keypair()
 
-        println(signature.export_public_key().size)
-
         val dilithium2AESPrivateKey = Dilithium2AESPrivateKey(privateKey)
 
         println(String(Base64.encode(dilithium2AESPrivateKey.encoded)))
