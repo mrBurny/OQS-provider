@@ -19,7 +19,7 @@ class Dilithium2AESKeyPairGeneratorSpi : KeyPairGeneratorSpi() {
     override fun generateKeyPair(): KeyPair {
         val signature = Signature(DILITHIUM2_AES_ALGORITHM_NAME, privateKeyBytes)
         val publicKeyBytes = signature.generate_keypair()
-        val publicKey = Dilithium2AESPublicKey.withValue(publicKeyBytes)
+        val publicKey = Dilithium2AESPublicKey(publicKeyBytes)
 
         val privateKeyBytes = signature.export_secret_key()
         val privateKey = Dilithium2AESPrivateKey(privateKeyBytes)

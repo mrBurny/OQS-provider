@@ -4,8 +4,8 @@ import java.security.Provider
 
 object OQSProvider : Provider("OQS", 1.0, "Provider of OQS implementations of PQ algorithms") {
     init {
-        put("KeyPairGenerator.Dilithium2-AES", "com.mrburny.dilithium.Dilithium2AESKeyPairGenerator")
-        put("Signature.Dilithium2-AES", "com.mrburny.dilithium.Dilithium2AESSignature")
+        put("KeyPairGenerator.Dilithium2-AES", "com.mrburny.dilithium.Dilithium2AESKeyPairGeneratorSpi")
+        put("Signature.Dilithium2-AES", "com.mrburny.dilithium.Dilithium2AESSignatureSpi")
     }
 
     const val DILITHIUM2_AES_ALGORITHM_NAME = "Dilithium2-AES"
