@@ -1,24 +1,18 @@
 package com.mrburny.dilithium
 
+import com.mrburny.OQSProvider
 import java.security.PublicKey
 
-class Dilithium2AESPublicKey : PublicKey {
+class Dilithium2AESPublicKey(
+    @Transient
+    private val publicKey: ByteArray
+) : PublicKey {
 
-    companion object {
-        fun withValue(valueBytes: ByteArray) : Dilithium2AESPublicKey {
-            TODO("Not yet implemented")
-        }
-    }
+    override fun getAlgorithm(): String = OQSProvider.DILITHIUM2_AES_ALGORITHM_NAME
 
-    override fun getAlgorithm(): String {
-        TODO("Not yet implemented")
-    }
-
-    override fun getFormat(): String {
-        TODO("Not yet implemented")
-    }
+    override fun getFormat(): String = "X.509"
 
     override fun getEncoded(): ByteArray {
-        TODO("Not yet implemented")
+        return publicKey
     }
 }

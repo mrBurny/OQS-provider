@@ -1,63 +1,42 @@
 package com.mrburny.dilithium
 
 import com.mrburny.OQSProvider.DILITHIUM2_AES_ALGORITHM_NAME
+import org.openquantumsafe.Signature
+import java.io.ByteArrayOutputStream
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.SignatureSpi
-import org.openquantumsafe.Signature
 
 @Suppress("unused")
-class Dilithium2AESSignature : SignatureSpi() {
-
-    companion object {
-        const val DEFAULT_MESSAGE_SIZE = 1024
-    }
+class Dilithium2AESSignatureSpi : SignatureSpi() {
 
     private var publicKey: PublicKey? = null
     private var privateKey: PrivateKey? = null
 
-    private var data: ByteArray = ByteArray(DEFAULT_MESSAGE_SIZE)
+    private var data = ByteArrayOutputStream()
     private var offset = 0
 
-    //TODO: do research on its purpose
+    // TODO: do research on its purpose
     private val parameters: MutableMap<String?, Any?> = mutableMapOf()
 
     override fun engineInitVerify(publicKey: PublicKey?) {
         this.publicKey = publicKey
-        this.data = ByteArray(DEFAULT_MESSAGE_SIZE)
+        this.data = ByteArrayOutputStream()
     }
 
     override fun engineInitSign(privateKey: PrivateKey?) {
         this.privateKey = privateKey
-        this.data = ByteArray(DEFAULT_MESSAGE_SIZE)
+        this.data = ByteArrayOutputStream()
     }
 
-    override fun engineUpdate(b: Byte) {
-        data[offset] = b
-        offset++
-
-        if (offset == data.size) {
-            expandArray()
-        }
-    }
-
-    private fun expandArray() {
-        val extended = ByteArray(data.size * 2)
-        data.copyInto(extended)
-        data = extended
-    }
+    override fun engineUpdate(b: Byte) = this.data.write(b.toInt())
 
     override fun engineUpdate(b: ByteArray?, off: Int, len: Int) {
         if (b == null) {
             return
         }
 
-        val exclusiveEnd = off + len
-        var updateOffset = off
-        while (updateOffset < exclusiveEnd) {
-            engineUpdate(b[updateOffset])
-            updateOffset++
-        }
+        data.write(b, off, len)
     }
 
     override fun engineSign(): ByteArray {
@@ -65,12 +44,13 @@ class Dilithium2AESSignature : SignatureSpi() {
             throw Exception("Pass private key before signing")
         }
         val signature = Signature(DILITHIUM2_AES_ALGORITHM_NAME, privateKey!!.encoded)
-        return signature.sign(data)
+        return signature.sign(data.toByteArray())
     }
 
     override fun engineVerify(sigBytes: ByteArray?): Boolean {
-        val signature = Signature(DILITHIUM2_AES_ALGORITHM_NAME, privateKey!!.encoded)
-        return signature.verify(data, sigBytes, publicKey!!.encoded)
+        // We're not supposed to know the private key before we verify!
+        val signature = Signature(DILITHIUM2_AES_ALGORITHM_NAME)
+        return signature.verify(data.toByteArray(), sigBytes, publicKey!!.encoded)
     }
 
     override fun engineSetParameter(param: String?, value: Any?) {
