@@ -1,8 +1,11 @@
 package com.mrburny.dilithium
 
 import com.mrburny.OQSProvider
+import org.bouncycastle.asn1.ASN1ObjectIdentifier
 import org.bouncycastle.asn1.ASN1OctetString
+import org.bouncycastle.asn1.DEROctetString
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier
 import org.bouncycastle.util.Arrays
 import java.security.PrivateKey
 
@@ -34,6 +37,26 @@ class Dilithium2AESPrivateKey(
     override fun getFormat(): String = "PKCS#8"
 
     override fun getEncoded(): ByteArray {
-        return privateKey
+        val algorithmIdentifier = AlgorithmIdentifier(ASN1ObjectIdentifier(OQSProvider.DILITHIUM2_AES_OID))
+        return PrivateKeyInfo(algorithmIdentifier, DEROctetString(privateKey)).encoded
     }
+
+    fun getKeyContent(): ByteArray = this.privateKey
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Dilithium2AESPrivateKey
+
+        if (!privateKey.contentEquals(other.privateKey)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return privateKey.contentHashCode()
+    }
+
+
 }
