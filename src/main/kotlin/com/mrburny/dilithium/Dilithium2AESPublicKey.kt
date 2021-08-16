@@ -2,17 +2,24 @@ package com.mrburny.dilithium
 
 import com.mrburny.OQSProvider
 import org.bouncycastle.asn1.ASN1ObjectIdentifier
-import org.bouncycastle.asn1.pkcs.PrivateKeyInfo
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo
-import org.bouncycastle.pqc.asn1.PQCObjectIdentifiers
-import org.bouncycastle.pqc.asn1.SPHINCS256KeyParams
 import java.security.PublicKey
 
 class Dilithium2AESPublicKey(
     @Transient
-    private val publicKey: ByteArray
+    val content: ByteArray
 ) : PublicKey {
+
+    companion object {
+        private const val DILITHIUM_PUBLIC_KEY_SIZE: Int = 1312
+    }
+
+    init {
+        if (content.size != DILITHIUM_PUBLIC_KEY_SIZE) {
+            throw IllegalStateException("Public key size should be $DILITHIUM_PUBLIC_KEY_SIZE")
+        }
+    }
 
     override fun getAlgorithm(): String = OQSProvider.DILITHIUM2_AES_ALGORITHM_NAME
 
@@ -20,10 +27,8 @@ class Dilithium2AESPublicKey(
 
     override fun getEncoded(): ByteArray {
         val algorithmIdentifier = AlgorithmIdentifier(ASN1ObjectIdentifier(OQSProvider.DILITHIUM2_AES_OID))
-        return SubjectPublicKeyInfo(algorithmIdentifier, publicKey).encoded
+        return SubjectPublicKeyInfo(algorithmIdentifier, content).encoded
     }
-
-    fun getKeyContent(): ByteArray = this.publicKey
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -31,14 +36,12 @@ class Dilithium2AESPublicKey(
 
         other as Dilithium2AESPublicKey
 
-        if (!publicKey.contentEquals(other.publicKey)) return false
+        if (!content.contentEquals(other.content)) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return publicKey.contentHashCode()
+        return content.contentHashCode()
     }
-
-
 }

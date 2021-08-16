@@ -51,14 +51,13 @@ class Dilithium2AESSignatureSpi : SignatureSpi() {
         if (privateKey == null) {
             throw Exception("Pass private key before signing")
         }
-        val signature = Signature(DILITHIUM2_AES_ALGORITHM_NAME, privateKey!!.getKeyContent())
+        val signature = Signature(DILITHIUM2_AES_ALGORITHM_NAME, privateKey!!.content)
         return signature.sign(data.toByteArray())
     }
 
     override fun engineVerify(sigBytes: ByteArray?): Boolean {
-        // We're not supposed to know the private key before we verify!
         val signature = Signature(DILITHIUM2_AES_ALGORITHM_NAME)
-        return signature.verify(data.toByteArray(), sigBytes, publicKey!!.getKeyContent())
+        return signature.verify(data.toByteArray(), sigBytes, publicKey!!.content)
     }
 
     override fun engineSetParameter(param: String?, value: Any?) {

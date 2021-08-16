@@ -14,6 +14,7 @@ import java.security.spec.KeySpec
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 
+@Suppress("unused")
 class Dilithium2AESKeyFactorySpi : KeyFactorySpi() {
     override fun engineGeneratePublic(keySpec: KeySpec?): PublicKey {
         if (keySpec == null || keySpec !is X509EncodedKeySpec) {
@@ -37,9 +38,10 @@ class Dilithium2AESKeyFactorySpi : KeyFactorySpi() {
         return Dilithium2AESPrivateKey(privateKey)
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T : KeySpec?> engineGetKeySpec(key: Key?, keySpec: Class<T>?): T {
         if (keySpec == null) {
-            throw InvalidKeySpecException("Unsupported key specification type: ${keySpec?.javaClass}")
+            throw InvalidKeySpecException("Unsupported key specification type: null")
         }
 
         if (key is Dilithium2AESPrivateKey) {
@@ -54,7 +56,7 @@ class Dilithium2AESKeyFactorySpi : KeyFactorySpi() {
             }
         }
 
-        throw InvalidKeySpecException("Unsupported key type: ${key?.javaClass}")
+        throw InvalidKeySpecException("Unsupported key specification type: ${key?.javaClass}")
     }
 
     override fun engineTranslateKey(key: Key?): Key {

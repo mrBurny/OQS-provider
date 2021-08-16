@@ -27,6 +27,12 @@ tasks.withType<Test>().configureEach {
     }
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
