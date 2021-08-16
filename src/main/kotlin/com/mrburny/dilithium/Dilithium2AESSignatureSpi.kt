@@ -30,7 +30,7 @@ class Dilithium2AESSignatureSpi : SignatureSpi() {
 
     override fun engineInitSign(privateKey: PrivateKey?) {
         if (privateKey !is Dilithium2AESPrivateKey) {
-            throw IllegalArgumentException("Public key must be an instance of Dilithium2AESPrivateKey")
+            throw IllegalArgumentException("Private key must be an instance of Dilithium2AESPrivateKey")
         }
 
         this.privateKey = privateKey
