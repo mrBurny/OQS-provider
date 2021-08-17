@@ -8,7 +8,7 @@ object OQSProvider : Provider("OQS", 1.0, "Provider of OQS implementations of PQ
         put("KeyPairGenerator.Dilithium2-AES", "com.mrburny.dilithium.Dilithium2AESKeyPairGeneratorSpi")
         put("Signature.Dilithium2-AES", "com.mrburny.dilithium.Dilithium2AESSignatureSpi")
         //TODO: private key containing OID will fail to find it by algorithm name
-        put("1.3.6.1.4.1.2.267.11.4.4", "com.mrburny.dilithium.Dilithium2AESSignatureSpi")
+        put("Signature.1.3.6.1.4.1.2.267.11.4.4", "com.mrburny.dilithium.Dilithium2AESSignatureSpi")
     }
 
     const val DILITHIUM2_AES_ALGORITHM_NAME = "Dilithium2-AES"
